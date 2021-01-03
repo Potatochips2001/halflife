@@ -5,7 +5,8 @@ import math
 def ke(dose, half_life, timesincedose):
     ke = math.log(2)/half_life
     remaining = dose * math.pow(math.e, -ke*timesincedose)
-    return remaining
+    p = 100-(1*math.pow(math.e, -ke*timesincedose)*100)
+    return "Remaining {0} | Probability of elimination {1}%".format(remaining, p)
 
 
 # dose, half-life in seconds. Dosage remaining will update every one(1) second
@@ -55,4 +56,12 @@ def ka(dose, half_life, timesincedose):
 def calculate(vd, cl):
     result = math.log(2)*vd/cl
     meanlifetime = result/math.log(2)
-    return "Half-life {0} Mean-lifetime {1}".format(result, meanlifetime)
+    constaneke = math.log(2)/result
+    return "Half-life {0} | Mean-lifetime {1} | decay constant {2}".format(result, meanlifetime, constaneke)
+
+# Initial amount, amount remaining, time after initial remaining after initial amount
+def amount(initialamount, remains, timesincedose):
+    result = timesincedose/math.log2(initialamount/remains)
+    meanlifetime = result/math.log(2)
+    constaneke = math.log(2)/result
+    return "Half-life {0} | Mean-lifetime {1} | Decay constant {2}".format(result, meanlifetime, constaneke)
