@@ -49,3 +49,9 @@ def ka(dose, half_life, timesincedose):
     ka = math.log(2)/half_life
     absorbed = dose - (dose*math.pow(math.e, -ka*timesincedose))
     return absorbed
+
+# Takes integer or float
+# volume of distribution, clearance rate (eg: L/kg, L/kg/hour) units must be same (eg: ml/kg, ml/kg/hour | L/kg, L/kg/hour)
+def calculate(vd, cl):
+    results = math.log(2)*vd/cl
+    return results
