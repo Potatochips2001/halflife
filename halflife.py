@@ -53,5 +53,6 @@ def ka(dose, half_life, timesincedose):
 # Takes integer or float
 # volume of distribution, clearance rate (eg: L/kg, L/kg/hour) units must be same (eg: ml/kg, ml/kg/hour | L/kg, L/kg/hour)
 def calculate(vd, cl):
-    results = math.log(2)*vd/cl
-    return results
+    result = math.log(2)*vd/cl
+    meanlifetime = result/math.log(2)
+    return "Half-life {0} Mean-lifetime {1}".format(result, meanlifetime)
