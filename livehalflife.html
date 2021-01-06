@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript">
+            var optionSelected;
+            var amount_;
+            var remaining_;
+            var halflife_;
+            var constantE;
+            var time_;
+            var perc;
+            var intervalUpdate;
+            var kaint;
+            var keint;
+            function calculate() {
+                optionSelected = document.getElementById("selectBox");
+                amount_ = document.getElementById("dosage").value;
+                remaining_ = amount_;
+                halflife_ = document.getElementById("halflife").value;
+                if (optionSelected.value == "Minutes") {halflife_ = halflife_*60;}
+                if (optionSelected.value == "Hours") {halflife_ = halflife_*3600}
+                constantE = -(Math.log(2)/halflife_);
+                time_ = 0;
+                perc = null;
+                intervalUpdate = document.getElementById("rangeInput").value;
+                if (document.getElementById("ab").checked == true) {
+                    kaint = setInterval(function() {
+                        startka();
+                    }, intervalUpdate);
+                }
+                if (document.getElementById("ab").checked == false) {
+                    keint = setInterval(function() {
+                        startke();
+                    }, intervalUpdate);;
+                }
+            }
+            function startka() {
+                remaining_ = amount_-(amount_*Math.pow(Math.E, constantE*time_));
+                perc = ((Math.pow(Math.E, constantE*time_)))*100;
+                document.getElementById("results").innerText = "Absorped " + remaining_ + " Chance of absorption " + perc + "%";
+                time_ += intervalUpdate/1000;
+            }
+            function startke() {
+                remaining_ = amount_*Math.pow(Math.E, constantE*time_);
+                perc = (1-Math.pow(Math.E, constantE*time_))*100;
+                document.getElementById("results").innerText = "Absorped " + remaining_ + " Chance of elimination " + perc + "%";
+                time_ += intervalUpdate/1000;
+            }
+            function stop() {
+                clearInterval(kaint);
+                clearInterval(keint);
+            }
+        </script>
+    </head>
+    <body>
+        <label>Amount</label>
+        <input type="number" id="dosage">
+        <label>Half-life</label>
+        <input type="number" id="halflife">
+        <select id="selectBox">
+            <option value="Seconds">Seconds</option>
+            <option value="Minutes">Minutes</option>
+            <option value="Hours">Hours</option>
+        </select>
+        <input type="checkbox" id="ab"> <label>Absorption</label> <br/>
+        <div class="sliderConstainer" id="sliderI">
+            <label>Update frequency (1-1000 ms)</label>
+            <input type="range" min="1" max="1000" value="250" class="slider" id="rangeInput">
+        </div>
+        <button onclick="calculate()">Start</button> <button onclick="stop()">Stop</button>
+        <p id="results"></p>
+    </body>
+</html>
