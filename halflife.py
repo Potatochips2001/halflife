@@ -19,10 +19,12 @@ def liveke(dose, half_life):
         while True:
             try:
                 remaining = dose*math.pow(math.e, -ke*time_)
-                print("Dose remaining: " + str(remaining), end='\r')
-                time.sleep(1)
-                time_ += 1
+                p = 100-(1*(math.pow(math.e, -ke*time_))*100)
+                print("Dose remaining: " + str(remaining) + " | Probability of elimination " + str(p) + "%", end='\r')
+                time.sleep(0.3)
+                time_ += 0.3
             except KeyboardInterrupt:
+                print('\r')
                 return "Stopped live elimination counter"
     except Exception as e:
         return e
@@ -38,8 +40,8 @@ def liveka(dose, half_life):
             try:
                 absorbed = dose - (dose * math.pow(math.e, -ka*time_))
                 print("Dose absorbed: " + str(absorbed), end='\r')
-                time.sleep(1)
-                time_ += 1
+                time.sleep(0.3)
+                time_ += 0.3
             except KeyboardInterrupt:
                 return "Stopped live absorption counter"
     except Exception as e:
@@ -65,3 +67,4 @@ def amount(initialamount, remains, timesincedose):
     meanlifetime = result/math.log(2)
     constaneke = math.log(2)/result
     return "Half-life {0} | Mean-lifetime {1} | Decay constant {2}".format(result, meanlifetime, constaneke)
+
