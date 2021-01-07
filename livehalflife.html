@@ -36,8 +36,7 @@
             }
             function startka() {
                 remaining_ = amount_-(amount_*Math.pow(Math.E, constantE*time_));
-                perc = ((Math.pow(Math.E, constantE*time_)))*100;
-                document.getElementById("results").innerText = "Absorped " + remaining_ + " Chance of absorption " + perc + "%";
+                document.getElementById("results").innerText = "Absorped " + remaining_;
                 time_ += intervalUpdate/1000;
             }
             function startke() {
