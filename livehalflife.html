@@ -42,7 +42,7 @@
             function startke() {
                 remaining_ = amount_*Math.pow(Math.E, constantE*time_);
                 perc = (1-Math.pow(Math.E, constantE*time_))*100;
-                document.getElementById("results").innerText = "Absorped " + remaining_ + " Chance of elimination " + perc + "%";
+                document.getElementById("results").innerText = "Remaining " + remaining_ + " Chance of elimination " + perc + "%";
                 time_ += intervalUpdate/1000;
             }
             function stop() {
