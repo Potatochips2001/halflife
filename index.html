@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        background-color: #121212;
+        color: #ccc;
+      }
+      button {
+        background-color: #202020;
+        color: #ccc;
+      }
+      button:hover {
+        transform: scale(1.1);
+      }
+      input {
+        background-color: #202020;
+        color: #ccc;
+        width: 50px;
+      }
+      select {
+        background-color: #202020;
+        color: #ccc;
+      }
+      .formulas {
+        color: #f00;
+      }
+    </style>
+    <script>
+      addEventListener("keydown", event => {
+        if (event.keyCode === 13) document.getElementById("btn").click();
+      });
+      let invalidInput = "\u{AF}\\_(ツ)_/\u{AF}";
+      function change() {
+        let choice = document.getElementById("half-life-type").value;
+        switch (choice) {
+          case "elimination": {
+            document.getElementById("typelabel").innerText = "Time since tmax";
+            break;
+          }
+          case "absorption": {
+            document.getElementById("typelabel").innerText = "Time since dose";
+            break;
+          }
+        }
+      }
+      function calculate() {
+        let timeSelect1 = document.getElementById("timeselect1").value; let timeSelect2 = document.getElementById("timeselect2").value;
+        let dose = document.getElementById("dose").value;
+        let halfLife = document.getElementById("half-life").value;
+        if (timeSelect1 === "minutes") halfLife = halfLife / 60;
+        if (timeSelect1 === "days") halfLife = halfLife * 24;
+        let timeSince = document.getElementById("timesince").value;
+        if (timeSelect2 === "minutes") timeSince = timeSince / 60;
+        if (timeSelect2 === "days") timeSince = timeSince * 24;
+        let results = document.getElementById("results");
+        let choice = document.getElementById("half-life-type").value;
+        if (dose <= 0 || dose == null) dose = 0;
+        if (halfLife <= 0 || halfLife == null) halfLife = 0;
+        if (timeSince <= 0 || timeSince == null) timeSince = 0;
+        let halfLivesPassed = timeSince / halfLife;
+        switch (choice) {
+          case "elimination": {
+            let ke = Math.log(2) / halfLife;
+            let remains = dose * Math.pow(Math.E, -ke*timeSince);
+            let chanceOfElimination = (1 - (remains / dose)) * 100;
+            results.innerText = `Amount remaining: ${remains}\nke: ${ke} unit=hour\nChance of elimination: ${chanceOfElimination}%\nHalf-lives passed: ${halfLivesPassed}`.replaceAll("NaN", invalidInput);
+            break;
+          }
+          case "absorption": {
+            let ka = Math.log(2) / halfLife;
+            let absorbed = dose - (dose * Math.pow(Math.E, -ka*timeSince));
+            results.innerText = `Amount absorped: ${absorbed}\nka: ${ka} unit=hour\nHalf-lives passed: ${halfLivesPassed}`.replaceAll("NaN", invalidInput);
+          }
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <select id="half-life-type" onchange="change();">
+      <option value="elimination">Elimination half-life</option>
+      <option value="absorption">Absorption half-life</option>
+    </select> <br> <br>
+    <div id="main">
+      <label>Dose</label>
+      <input id="dose" type="number"> <br>
+      <label>Half-life</label>
+      <input id="half-life" type="number">
+      <select id="timeselect1">
+        <option value="hour">Hours</option>
+        <option value="minutes">Minutes</option>
+        <option value="days">Days</option>
+      </select> <br>
+      <label id="typelabel">Time since tmax</label>
+      <input id="timesince" type="number">
+      <select id="timeselect2">
+        <option value="hour">Hours</option>
+        <option value="minutes">Minutes</option>
+        <option value="days">Days</option>
+      </select> <br>
+      <button id="btn" onclick="calculate();">Calculate</button> <br>
+      <p id="results"></p>
+    </div>
+    <p class="formulas">ke OR ka = ln(2) / t<sup>1/2</sup></p>
+    <p class="formulas">Formula: dose*e<sup>-ke*t</sup> = amount remaining</p>
+    <p class="formulas">Formula: dose-(dose*e<sup>-ka*t</sup>) = amount absorbed</p>
+  </body>
+</html>
